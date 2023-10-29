@@ -8,6 +8,7 @@ import Reservation from "./pages/Reservation/Reservation";
 import User from "./pages/User/User";
 import DashboardEm from "./pages/Dashboard/Client/DashboardEm";
 import NavbarEm from "./components/Navbar/Client/NavBarEm";
+import { ToastContainer } from "react-toastify";
 const Layout = () => {
   return (
     <div>
@@ -26,6 +27,8 @@ const LayoutEm = () => {
 };
 export default function App() {
   return (
+<>
+<ToastContainer />
 
     <BrowserRouter>
       <Routes>
@@ -46,6 +49,6 @@ export default function App() {
         </Route>
       </Routes>
     </BrowserRouter>
-  
+  </>
   );
 }

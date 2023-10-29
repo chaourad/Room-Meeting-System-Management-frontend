@@ -3,34 +3,59 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { IoAddSharp } from "react-icons/io5";
 import TextField from "@mui/material/TextField";
+import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
+import {  toast } from "react-toastify";
 
 function AddFloor() {
   let [isOpen, setIsOpen] = useState(false);
   const [floor , setFloor]= useState("");
-
   const handleFloorChange = (e) => {
     setFloor(e.target.value);
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(floor);
         try{
         const request = await axios.post("http://localhost:5028/api/Floor", { 
             nom:floor
          });
-        console.log(request);
-        console.log(floor);
+    
         if(request.status ===200){
             setFloor("");
+            toast.success('🦄 Floor add succeful', {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              });
             closeModal();
+        }else{
+          toast.error('error', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
+         
         }
         }catch(error){
             console.log("Error", error)
         }
     }
+    
+   
   function closeModal() {
     setIsOpen(false);
+    window.location.reload(false);
+
   }
 
   function openModal() {
@@ -102,7 +127,7 @@ function AddFloor() {
                     <button
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={handleSubmit}
+                      onClick={handleSubmit }
                     >
                       Confirme
                     </button>
