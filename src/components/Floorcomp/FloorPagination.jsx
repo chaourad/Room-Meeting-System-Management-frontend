@@ -1,6 +1,30 @@
-import React from "react";
-
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { AiTwotoneEdit } from "react-icons/ai";
+import { RiDeleteBin6Fill } from "react-icons/ri";
 function FloorPagination() {
+  const [floor, setFloor] = useState([]);
+  useEffect(() => {
+    fetchdata();
+  }, []);
+  const fetchdata = (e) => {
+    try {
+      axios.get("http://localhost:5028/api/Floor").then((response) => {
+        setFloor(response.data);
+        console.log(response.data);
+      });
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you want to delete this floor?")) {
+      axios.delete(`http://localhost:5028/api/Floor/Delete/${id}`).then(() => {
+        setFloor(floor.filter((v) => v.id !== id));
+      });
+    }
+  };
+
   return (
     <div className="mx-40 mt-8">
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -8,42 +32,33 @@ function FloorPagination() {
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" class="px-6 py-3">
-                Product name
+                Floor Name
               </th>
-              <th scope="col" class="px-6 py-3">
-                Color
-              </th>
-              <th scope="col" class="px-6 py-3">
-                Category
-              </th>
-              <th scope="col" class="px-6 py-3">
-                Price
-              </th>
+
               <th scope="col" class="px-6 py-3">
                 Action
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <th
-                scope="row"
-                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            {" "}
+            {floor.map((v, index) => (
+              <tr
+                key={index}
+                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
-                Apple MacBook Pro 17"
-              </th>
-              <td class="px-6 py-4">Silver</td>
-              <td class="px-6 py-4">Laptop</td>
-              <td class="px-6 py-4">$2999</td>
-              <td class="px-6 py-4">
-                <a
-                  href="#"
-                  class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >
-                  Edit
-                </a>
-              </td>
-            </tr>
+                <td class="px-6 py-4">{v.nom}</td>
+
+                <td class="px-2 py-4 flex flex-row items-center ">
+                  <div className="pl-6 pr-4 text-white">
+                    <button >Edit</button>
+                  </div>
+                  <div className="pl-6 pr-4 text-red-600">
+                    <button onClick={() => handleDelete(v.id)}>Delete</button>
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
         <nav
